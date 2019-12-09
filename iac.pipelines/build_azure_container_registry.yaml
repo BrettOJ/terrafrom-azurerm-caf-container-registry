@@ -1,0 +1,22 @@
+
+
+steps:
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+  displayName: 'Install Terraform 0.12.16'
+  inputs:
+    terraformVersion: 0.12.16
+
+- task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  displayName: 'terraform init'
+  inputs:
+    command: init
+    workingDirectory: '$(System.DefaultWorkingDirectory)/_tfpipelines/hosted_agent/terraform_create_aci/'
+
+- task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  displayName: 'terraform apply'
+  inputs:
+    command: apply
+    workingDirectory: '$(System.DefaultWorkingDirectory)/_tfpipelines/hosted_agent/terraform_create_aci/'
+    environmentServiceName: AzureServiceConnection
+    commandOptions: '-auto-approve'
+
