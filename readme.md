@@ -1,61 +1,105 @@
-variable "resource_group_name" {
-  description = "resource group name"
+
+# Creates an Azure container registry
+
+creates a container registry in the specified region.
+
+Reference the module to a specific version (recommended):
+
+```hcl
+module "container_registry" {
+    source  = "aztfmod/caf-container-registry/azurerm"
+    version = "0.0.1"
+    resource_group_name      = var.resource_group_name
+    location                 = var.location
+    name                     = var.container_registry_name
+    sku                      = var.sku
+    admin_enabled            = var.admin_enabled
+
 }
-variable "location" {
-  description = "location of the variable group"
+```
+
+Or get the latest version
+
+```hcl
+module "resource_groups" {
+    source                  = "git://github.com/aztfmod/container_registry.git?ref=latest"
+    resource_group_name      = var.resource_group_name
+    location                 = var.location
+    name                     = var.container_registry_name
+    sku                      = var.sku
+    admin_enabled            = var.admin_enabled
 }
-variable "sku" {
-  
-}
+```
+
+# Parameters
+
+## resource_groups
+
+(Required) Object that describes the resource groups to be created with their geo.
+Global group of tags will be added to all RG, specific tags can be added per RG.
+
+```hcl
 variable "container_registry_name" {
-  
+  description = "Name of the container registry"
 }
+```
+ 
+```hcl
+
 variable "admin_enabled" {
   
 }
+```
 
-
-
-container_group_name = "bojtestcontainergroup"
-resource_group_name = "containergroup-rg"
-location = "southeastasia"
-dns_name_label = "bojtestcontainergroup"
-os_type = "linux"
-
-container_name = "mycont01"
-container_image = "azurehostedagent"
-container_cpu = 0.5
-container_memory = 1.5
-container_port = 80
-
-
-
-
-resource "azurerm_resource_group" "aci_rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
-resource "azurerm_container_registry" "acr" {
-  name                     = "containerRegistry1"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-  sku                      = "Premium"
-  admin_enabled            = false
+```hcl
+variable "location" {
+  description = "location of the variable group"
 }
 
-resource "azurerm_container_group" "containergroup" {
-  name                  = var.container_group_name
-  resource_group_name   = azurerm_resource_group.aci_rg.name
-  location              = azurerm_resource_group.aci_rg.location
-  ip_address_type       = "public"
-  dns_name_label        = var.dns_name_label
-  os_type               = var.os_type
+```
 
-  container {
-      name      = var.container_name
-      image     = var.container_image
-      cpu       = var.container_cpu
-      memory    = var.container_memory
-      port      = var.container_port
+```hcl
+variable "sku" {
+  description = "Sku of the container registry"
 }
+```
+
+## prefix
+
+(Optional) You can use a prefix to add to the list of resource groups you want to create
+
+```hcl
+variable "prefix" {
+    description = "(Optional) You can use a prefix to add to the list of resource groups you want to create"
 }
+```
+
+Example
+
+```hcl
+locals {
+    prefix = "${random_string.prefix.result}-"
+}
+
+resource "random_string" "prefix" {
+    length  = 4
+    upper   = false
+    special = false
+}
+```
+
+# Output
+
+## object
+
+Returns the full set of created resource groups as a map, as follows:
+
+```hcl
+
+
+
+
+
+
+
+```
