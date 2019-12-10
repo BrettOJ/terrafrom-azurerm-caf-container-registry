@@ -12,3 +12,7 @@ variable "container_registry_name" {
 }
 variable "admin_enabled" {
 }
+variable "tags" {
+  
+}
+
